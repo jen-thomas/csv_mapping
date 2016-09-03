@@ -1,13 +1,18 @@
 <html>
 <head>
-<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
+<link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.5/dist/leaflet.css" />
+<script src="https://npmcdn.com/leaflet@0.7.5/dist/leaflet.js"></script>
 <link rel="stylesheet" href="css.css" />
+
+<link rel="stylesheet" href="leaflet-text-icon.css" />
+<script src="leaflet-text-icon.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
+
 <title>MAPPING MOVEMENTS</title>
 </head>
 <body>
 <div id="mapid"></div>
-<script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
 <script>
 var mymap = L.map('mapid').setView([51.5, -0.09], 13);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -38,7 +43,8 @@ Papa.parse("test.csv", {
         var lat = results.data[index].lat;
         var lon = results.data[index].lon;
         var id = results.data[index].id;
-        var marker = L.marker([lat, lon]).addTo(mymap);;
+        var icon = new L.TextIcon({text:123, color: 'red'});
+        var marker = L.marker([lat, lon], {icon: icon}).addTo(mymap);
         marker.bindPopup(id).openPopup();
 }
 

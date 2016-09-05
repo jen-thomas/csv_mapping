@@ -8,44 +8,49 @@
 <script src="leaflet-text-icon.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js"></script>
-
+<script src="Leaflet.MakiMarkers.js"></script>
+<script src="config.js"></script>
 <title>MAPPING MOVEMENTS</title>
 </head>
 <body>
 <div id="mapid"></div>
 <script>
-var mymap = L.map('mapid').setView([51.5, -0.09], 13);
+L.MakiMarkers.accessToken = csv_mapping_access_token;
+var mymap = L.map('mapid').setView([52.5, -3.09], 8);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-    maxZoom: 18
+    maxZoom: 25
 }).addTo(mymap);
-var marker = L.marker([51.5, -0.09]).addTo(mymap);
-var circle = L.circle([51.508, -0.11], 500, {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5
-}).addTo(mymap);
-var polygon = L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047],
-    [51.48, -0.03]
-]).addTo(mymap);
-marker.bindPopup("<b>Hello Carles!</b><br>I am a Jen.").openPopup();
-circle.bindPopup("I am a circle.");
-polygon.bindPopup("I am a polygon.");
-Papa.parse("test.csv", {
+Papa.parse("data/srg_peregrine_recoveries.csv", {
 	download: true,
         skipEmptyLines: true,
         header: true,
 	complete: function(results) {console.log("Parsing complete:", results);
         for (var index = 0; index < results.data.length; ++index) {
-        var lat = results.data[index].lat;
-        var lon = results.data[index].lon;
-        var id = results.data[index].id;
-        var icon = new L.TextIcon({text:123, color: 'red'});
-        var marker = L.marker([lat, lon], {icon: icon}).addTo(mymap);
-        marker.bindPopup(id).openPopup();
+        var lat_caught_mins = results.data[index].Latitude;
+        var lon_caught_mins = results.data[index].Longitude;
+        var lat_recaptured_mins = results.data[index]["Finding Latitude"];
+        var lon_recaptured_mins = results.data[index]["Finding Longitude"];
+        var lat_caught = lat_caught_mins/60;
+        var lon_caught = lon_caught_mins/60;
+        var lat_recaptured = lat_recaptured_mins/60;
+        var lon_recaptured = lon_recaptured_mins/60;
+        var ring_number = results.data[index]["Ring Number"];
+        var colour_ring = results.data[index]["Inscription"];
+        var colour_ring_colour = results.data[index]["Colour"];
+//        var icon_caught =  new L.TextIcon({text:ring_number, color: 'red'});
+//        var icon_recaptured = new L.TextIcon({text:ring_number, color: 'blue'});
+        var colours = ["#ff0000", "#800080", "#ff00ff", "#008000", "#0000ff", "#ffa500", "#00ffff", "#800000", "#00ff00", "#808000", "#000080", "#c0c0c0"]
+        var icon_caught = L.MakiMarkers.icon({icon: "circle", color: colours[index % colours.length], size: "m"});
+        var icon_recaptured = L.MakiMarkers.icon({icon: "circle-stroked", color: colours[index % colours.length], size: "m"});
+        var marker_caught = L.marker([lat_caught, lon_caught], {icon: icon_caught}).addTo(mymap);
+        var marker_recaptured = L.marker([lat_recaptured, lon_recaptured], {icon: icon_recaptured}).addTo(mymap);
+        var lines = L.polyline([[lat_caught, lon_caught], [lat_recaptured, lon_recaptured]], {color: colours[index % colours.length]}).addTo(mymap);
+//        var popup = L.popup().setLatLon([lat_recaptured, lon_recaptured]).setContent("This is a line").openOn(mymap);
+        var latlng_caught = L.latLng(lat_caught, lon_caught);
+        var latlng_recaptured = L.latLng(lat_recaptured, lon_recaptured);
+        var distance_travelled = latlng_caught.distanceTo(latlng_recaptured)/1000;
+        lines.bindPopup("<strong>Ring number: </strong>"+ring_number+"<br></br><strong>Colour ring: </strong>"+colour_ring+" "+colour_ring_colour+"<br></br><strong>Distance travelled: </strong>"+distance_travelled.toFixed(2).toString()+" km").openPopup();
 }
 
 

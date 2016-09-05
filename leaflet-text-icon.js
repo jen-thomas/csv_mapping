@@ -5,7 +5,7 @@
 			className: 'leaflet-div-icon',
 			getIconUrl: function(color) {
 				//if (L.Browser.retina) - use 2x version
-				return '/images/marker-hole-'+ (color || 'blue') +'.svg' 
+				return 'marker-hole-'+ (color || 'blue') +'.svg' 
 			}
 		}, new L.Icon.Default().options),
 

@@ -15,6 +15,11 @@
 <body>
 <div id="mapid"></div>
 <script>
+
+if(window['csv_mapping_access_token'] == 'undefined');
+{
+	alert("csv_mapping_access_token not found, check the README");
+}
 L.MakiMarkers.accessToken = csv_mapping_access_token;
 var mymap = L.map('mapid').setView([52.5, -3.09], 8);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

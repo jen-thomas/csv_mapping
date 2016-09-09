@@ -45,9 +45,9 @@ Papa.parse("data/srg_peregrine_recoveries.csv", {
         var colour_ring_colour = results.data[index]["Colour"];
 //        var icon_caught =  new L.TextIcon({text:ring_number, color: 'red'});
 //        var icon_recaptured = new L.TextIcon({text:ring_number, color: 'blue'});
-        var colours = ["#ff0000", "#800080", "#ff00ff", "#008000", "#0000ff", "#ffa500", "#00ffff", "#800000", "#00ff00", "#808000", "#000080", "#c0c0c0"]
-        var icon_caught = L.MakiMarkers.icon({icon: "circle", color: colours[index % colours.length], size: "m"});
-        var icon_recaptured = L.MakiMarkers.icon({icon: "circle-stroked", color: colours[index % colours.length], size: "m"});
+        var colours = ["#ff0000", "#800080", "#ff00ff", "#008000", "#0000ff", "#ffa500", "#00ffff", "#800000", "#00ff00", "#808000", "#000080", "#c0c0c0", "#008b8b", "#ffff00", "#ff7f50", "#dc143c"];
+        var icon_caught = L.MakiMarkers.icon({icon: "circle-stroked", color: colours[index % colours.length], size: "m"});
+        var icon_recaptured = L.MakiMarkers.icon({icon: "circle", color: colours[index % colours.length], size: "m"});
         var marker_caught = L.marker([lat_caught, lon_caught], {icon: icon_caught}).addTo(mymap);
         var marker_recaptured = L.marker([lat_recaptured, lon_recaptured], {icon: icon_recaptured}).addTo(mymap);
         var lines = L.polyline([[lat_caught, lon_caught], [lat_recaptured, lon_recaptured]], {color: colours[index % colours.length]}).addTo(mymap);

@@ -16,7 +16,7 @@
 <div id="mapid"></div>
 <script>
 
-if(window['csv_mapping_access_token'] == 'undefined');
+if('csv_mapping_access_token' in window == false)
 {
 	alert("csv_mapping_access_token not found, check the README");
 }
